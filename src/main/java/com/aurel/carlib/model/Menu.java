@@ -1,11 +1,18 @@
 package com.aurel.carlib.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.aurel.carlib.helper.Functions;
+import com.aurel.carlib.helper.TypeMenu;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,46 +22,40 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Table(name = "rubrique", 
-        uniqueConstraints=
-        @UniqueConstraint(columnNames={"nom"}))
+@Table(name = "menu")
 @DynamicUpdate
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter @Setter
-public class Rubrique {
-    
+public class Menu {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_rubrique")
+    @Column(name = "id_menu")
     private int id;
 
-	@NonNull
-    private String nom;
     @NonNull
-    private String description;
-    
-    @OneToMany(mappedBy = "rubrique", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    private TypeMenu type;
+
+    @OneToMany(mappedBy = "menu", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<MenuItem> items = new ArrayList<MenuItem>();
 
-
-    public void addItem(MenuItem item) {
+    public void ajouterItem(MenuItem item){
         if(Functions.contains(items, item)) return;
 
         items.add(item);
-        item.setRubrique(this);
-    }
-    public void removeItem(MenuItem item) {
-        items.remove(item);
-        item.setRubrique(null);
+        item.setMenu(this);
     }
 
+    public void supprimerItem(MenuItem item){
+        items.remove(item);
+        item.setMenu(null);
+    }
+
+    public List<MenuItem> getListeItems(){
+        return items;
+    }
+    
 }

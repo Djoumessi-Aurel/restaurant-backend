@@ -1,32 +1,25 @@
 package com.aurel.carlib;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.aurel.carlib.model.Category;
-import com.aurel.carlib.model.Comment;
-import com.aurel.carlib.model.Product;
-import com.aurel.carlib.service.CategoryService;
-import com.aurel.carlib.service.CommentService;
-import com.aurel.carlib.service.ProductService;
+import com.aurel.carlib.helper.TypeMenu;
+import com.aurel.carlib.model.Menu;
+import com.aurel.carlib.model.Serveur;
+import com.aurel.carlib.repository.MenuRepository;
+import com.aurel.carlib.repository.ServeurRepository;
 
 import jakarta.transaction.Transactional;
 
 @SpringBootApplication
 public class CarlibApplication implements CommandLineRunner {
 
+	// @Autowired
+	// private ProductService productService;
 	@Autowired
-	private ProductService productService;
-
-	@Autowired
-	private CommentService commentService;
-
-	@Autowired
-	private CategoryService categoryService;
+	private MenuRepository menuRepo;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CarlibApplication.class, args);
@@ -35,6 +28,34 @@ public class CarlibApplication implements CommandLineRunner {
 	@Override
 	@Transactional
 	public void run(String... args) throws Exception {
+		System.out.println("COMPILATION TERMINEE");
+		Menu menu1 = new Menu(TypeMenu.PETIT_DEJEUNER),
+			menu2 = new Menu(TypeMenu.DEJEUNER),
+			menu3 = new Menu(TypeMenu.SOUPER);
+
+			menuRepo.save(menu1); menuRepo.save(menu2); menuRepo.save(menu3);
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * ANCIEN MAIN
+ 
+ public void run(String... args) throws Exception {
 		System.out.println("\n##################\n\nBonjour à tous. On peut commencer\n\n");
 
 		Product existingProduct = productService.getProductById(2).get();
@@ -134,4 +155,6 @@ public class CarlibApplication implements CommandLineRunner {
 		System.out.println("\n\n##################");
 	}
 
-}
+
+ *
+ */

@@ -1,16 +1,47 @@
-package com.aurel.carlib.code;
+package com.aurel.carlib.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.aurel.carlib.helper.Functions;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "orderItem")
+@DynamicUpdate
+@Getter @Setter
 public class OrderItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_orderItem")
+    private int id;
     
+    @ManyToOne
+    @JoinColumn(name = "id_menuItem")
     private MenuItem menuItem;
+
+    @ManyToOne
+    @JoinColumn(name = "id_commande")
     private Commande commande;
-    private Set<OrderIngredient> orderIngredients = new HashSet<OrderIngredient>();
+
+    @OneToMany(mappedBy = "orderItem", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    private List<OrderIngredient> orderIngredients = new ArrayList<OrderIngredient>();
 
     public void setMenuItem(MenuItem newMenuItem) {
         if (menuItem != newMenuItem) {
@@ -41,7 +72,9 @@ public class OrderItem {
     }
 
     public void ajouterIngredient(OrderIngredient ing){
-        orderIngredients.add(ing);
+        if(Functions.contains(orderIngredients, ing)) return;
+
+        orderIngredients.add(ing); // le probleme est ici, on arrive pas a ajouter l'ingredient
         ing.setOrderItem(this);
     }
     public void supprimerIngredient(OrderIngredient ing){

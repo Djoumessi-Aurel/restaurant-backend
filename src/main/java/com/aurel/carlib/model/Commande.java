@@ -1,38 +1,66 @@
-package com.aurel.carlib.code;
+package com.aurel.carlib.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.aurel.carlib.helper.Functions;
 import com.aurel.carlib.helper.StatutCommande;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "commande")
+@DynamicUpdate
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Data
+@Getter @Setter
 public class Commande {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_commande")
+    private int id;
 
     @NonNull
     private Date date;
-    @NonNull
-    private Time heure;
     @NonNull
     private Integer numeroTable;
     @NonNull
     private StatutCommande statut = StatutCommande.EN_CREATION;
 
+    @ManyToOne
+    @JoinColumn(name = "id_modePaiement")
     private ModePaiement modePaiement;
-    private Set<OrderItem> orderItems = new HashSet<OrderItem>();
+
+    @OneToMany(mappedBy = "commande", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    private List<OrderItem> orderItems = new ArrayList<OrderItem>();
+
+    @ManyToOne
+    @JoinColumn(name = "id_client")
     private Client client;
+
+    @ManyToOne
+    @JoinColumn(name = "id_serveur")
     private Serveur serveur; 
 
-    public static Set<Commande> listeCommandes = new HashSet<Commande>(); //Variable de l'application
 
     public void setModePaiement(ModePaiement newModePaiement) {
         if (modePaiement != newModePaiement) {
@@ -88,6 +116,7 @@ public class Commande {
     }
 
     public void ajouterItem(OrderItem item){
+        if(Functions.contains(orderItems, item)) return;
         orderItems.add(item);
         item.setCommande(this);
     }
@@ -96,31 +125,8 @@ public class Commande {
         item.setCommande(null);
     }
 
-    public void enregistrerCommande(){
-        this.setStatut(StatutCommande.ENREGISTREE);
-        listeCommandes.add(this);
-    }
-
     public void validerCommande(){
         this.setStatut(StatutCommande.VALIDEE);
-    }
-
-    public static void ajouterCommande(Commande cmd){
-        listeCommandes.add(cmd);
-    }
-
-    public static void supprimerCommande(Commande cmd){
-        listeCommandes.remove(cmd);
-    }
-
-    public static ArrayList<Commande> getListeCommandesByStatus(StatutCommande state){
-        ArrayList<Commande> cmds = new ArrayList<Commande>();
-
-        for(Commande c: listeCommandes){
-            if(c.getStatut() == state) cmds.add(c);
-        }
-
-        return cmds;
     }
 
 }

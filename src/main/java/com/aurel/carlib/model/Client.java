@@ -15,46 +15,41 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Table(name = "rubrique", 
-        uniqueConstraints=
-        @UniqueConstraint(columnNames={"nom"}))
+@Table(name = "client")
 @DynamicUpdate
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter @Setter
-public class Rubrique {
-    
+public class Client {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_rubrique")
+    @Column(name = "id_client")
     private int id;
-
-	@NonNull
-    private String nom;
-    @NonNull
-    private String description;
     
-    @OneToMany(mappedBy = "rubrique", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    private List<MenuItem> items = new ArrayList<MenuItem>();
+    @NonNull
+    private String nom;
+
+    @OneToMany(mappedBy = "client", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    private List<Commande> commandes = new ArrayList<Commande>();
 
 
-    public void addItem(MenuItem item) {
-        if(Functions.contains(items, item)) return;
-
-        items.add(item);
-        item.setRubrique(this);
+    public void addCommande(Commande cmd){
+        if(Functions.contains(commandes, cmd)) return;
+        commandes.add(cmd);
+        cmd.setClient(this);
     }
-    public void removeItem(MenuItem item) {
-        items.remove(item);
-        item.setRubrique(null);
+
+    public void removeCommande(Commande cmd){
+        commandes.remove(cmd);
+        cmd.setClient(null);
     }
 
 }
