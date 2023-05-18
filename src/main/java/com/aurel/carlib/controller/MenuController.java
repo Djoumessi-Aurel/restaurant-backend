@@ -23,7 +23,7 @@ public class MenuController {
     @Autowired
 	private MenuRepository repo;
 	
-	@GetMapping("/")
+	@GetMapping
     public ResponseEntity<List<Menu>> getAllTutorials(@RequestParam(required = false) TypeMenu type) {
     try {
         List<Menu> menus = new ArrayList<Menu>();

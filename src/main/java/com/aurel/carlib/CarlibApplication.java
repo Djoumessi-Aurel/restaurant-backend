@@ -29,11 +29,11 @@ public class CarlibApplication implements CommandLineRunner {
 	@Transactional
 	public void run(String... args) throws Exception {
 		System.out.println("COMPILATION TERMINEE");
-		Menu menu1 = new Menu(TypeMenu.PETIT_DEJEUNER),
-			menu2 = new Menu(TypeMenu.DEJEUNER),
-			menu3 = new Menu(TypeMenu.SOUPER);
+		// Menu menu1 = new Menu(TypeMenu.PETIT_DEJEUNER),
+		// 	menu2 = new Menu(TypeMenu.DEJEUNER),
+		// 	menu3 = new Menu(TypeMenu.SOUPER);
 
-			menuRepo.save(menu1); menuRepo.save(menu2); menuRepo.save(menu3);
+		// 	menuRepo.save(menu1); menuRepo.save(menu2); menuRepo.save(menu3);
 	}
 
 }

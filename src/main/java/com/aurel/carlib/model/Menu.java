@@ -53,9 +53,5 @@ public class Menu {
         items.remove(item);
         item.setMenu(null);
     }
-
-    public List<MenuItem> getListeItems(){
-        return items;
-    }
     
 }
