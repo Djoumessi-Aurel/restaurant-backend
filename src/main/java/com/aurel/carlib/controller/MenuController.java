@@ -1,12 +1,16 @@
 package com.aurel.carlib.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +28,7 @@ public class MenuController {
 	private MenuRepository repo;
 	
 	@GetMapping
-    public ResponseEntity<List<Menu>> getAllTutorials(@RequestParam(required = false) TypeMenu type) {
+    public ResponseEntity<List<Menu>> getAllMenus(@RequestParam(required = false) TypeMenu type) {
     try {
         List<Menu> menus = new ArrayList<Menu>();
 
@@ -38,6 +42,28 @@ public class MenuController {
         }
 
         return new ResponseEntity<>(menus, HttpStatus.OK);
+        } catch (Exception e) {
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Menu> getMenuById(@PathVariable("id") int id) {
+        Optional<Menu> menu = repo.findById(id);
+
+        if (menu.isPresent()) {
+        return new ResponseEntity<>(menu.get(), HttpStatus.OK);
+        } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<Menu> createMenu(@RequestBody Menu menu) {
+        try {
+        System.out.println("Menu à créer: " + menu);
+        Menu _menu = repo.save(new Menu(menu.getType()));
+        return new ResponseEntity<>(_menu, HttpStatus.CREATED);
         } catch (Exception e) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
