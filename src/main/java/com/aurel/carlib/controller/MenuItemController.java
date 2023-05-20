@@ -101,7 +101,7 @@ public class MenuItemController {
 
     @PostMapping
     public ResponseEntity<?> createMenuItem(@RequestBody MenuItem menuItem,
-        @RequestParam(required = true) int menuId, @RequestParam(required = true) int rubriqueId) {
+        @RequestParam int menuId, @RequestParam int rubriqueId) {
         try {
             Optional<Menu> menu = menuRepo.findById(menuId);
             if(!menu.isPresent()){

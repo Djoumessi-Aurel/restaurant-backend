@@ -81,7 +81,7 @@ public class IngredientController {
 
     @PostMapping
     public ResponseEntity<?> createIngredient(@RequestBody Ingredient ingredient,
-        @RequestParam(required = true) int menuItemId) {
+        @RequestParam int menuItemId) {
         try {
             Optional<MenuItem> menuItem = menuItemRepo.findById(menuItemId);
             if(!menuItem.isPresent()){

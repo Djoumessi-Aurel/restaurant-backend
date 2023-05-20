@@ -56,6 +56,7 @@ public class MenuItem {
     @OneToMany(mappedBy = "menuItem", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<Ingredient> ingredients = new ArrayList<Ingredient>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "menuItem", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 

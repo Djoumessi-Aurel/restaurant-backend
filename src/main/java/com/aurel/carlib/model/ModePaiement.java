@@ -12,6 +12,7 @@ import java.util.List;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.aurel.carlib.helper.Functions;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -43,6 +44,7 @@ public class ModePaiement {
     @NonNull
     private String description;
     
+    @JsonIgnore
     @OneToMany(mappedBy = "modePaiement", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<Commande> commandes = new ArrayList<Commande>();
 

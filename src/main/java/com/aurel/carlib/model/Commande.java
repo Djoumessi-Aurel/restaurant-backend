@@ -14,6 +14,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.aurel.carlib.helper.Functions;
 import com.aurel.carlib.helper.StatutCommande;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -40,7 +41,7 @@ public class Commande {
     private int id;
 
     @NonNull
-    private Date date;
+    private Date date = new Date();
     @NonNull
     private Integer numeroTable;
     @NonNull
@@ -50,6 +51,7 @@ public class Commande {
     @JoinColumn(name = "id_modePaiement")
     private ModePaiement modePaiement;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "commande", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
