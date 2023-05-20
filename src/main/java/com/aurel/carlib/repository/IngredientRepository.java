@@ -7,6 +7,7 @@ import com.aurel.carlib.model.Ingredient;
 public interface IngredientRepository extends CrudRepository<Ingredient, Integer> {
 
     public Iterable<Ingredient> findByNom(String name);
+    public Iterable<Ingredient> findByNomContains(String name);
     public Iterable<Ingredient> findByMenuItemId(int id);
     
 }

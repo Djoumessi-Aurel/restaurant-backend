@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.aurel.carlib.helper.Functions;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -51,6 +52,7 @@ public class MenuItem {
     @JoinColumn(name = "id_menu")
     private Menu menu;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "menuItem", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<Ingredient> ingredients = new ArrayList<Ingredient>();
 

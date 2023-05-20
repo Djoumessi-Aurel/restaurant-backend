@@ -16,53 +16,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.aurel.carlib.helper.TypeMenu;
-import com.aurel.carlib.model.Menu;
-import com.aurel.carlib.repository.MenuRepository;
+import com.aurel.carlib.model.Serveur;
+import com.aurel.carlib.repository.ServeurRepository;
 
 @RestController
-@RequestMapping("/api/menu")
-public class MenuController {
+@RequestMapping("/api/serveur")
+public class ServeurController {
     
     @Autowired
-	private MenuRepository repo;
+	private ServeurRepository repo;
 	
 	@GetMapping
-    public ResponseEntity<List<Menu>> getAllMenus(@RequestParam(required = false) TypeMenu type) {
+    public ResponseEntity<List<Serveur>> getAllServeurs(@RequestParam(required = false) String nom) {
     try {
-        List<Menu> menus = new ArrayList<Menu>();
+        List<Serveur> serveurs = new ArrayList<Serveur>();
 
-        if (type == null)
-        repo.findAll().forEach(menus::add);
+        if (nom == null)
+        repo.findAll().forEach(serveurs::add);
         else
-        repo.findByType(type).forEach(menus::add);
+        repo.findByNom(nom).forEach(serveurs::add);
 
-        if (menus.isEmpty()) {
+        if (serveurs.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<>(menus, HttpStatus.OK);
+        return new ResponseEntity<>(serveurs, HttpStatus.OK);
         } catch (Exception e) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Menu> getMenuById(@PathVariable("id") int id) {
-        Optional<Menu> menu = repo.findById(id);
+    public ResponseEntity<Serveur> getServeurById(@PathVariable("id") int id) {
+        Optional<Serveur> serveur = repo.findById(id);
 
-        if (menu.isPresent()) {
-        return new ResponseEntity<>(menu.get(), HttpStatus.OK);
+        if (serveur.isPresent()) {
+        return new ResponseEntity<>(serveur.get(), HttpStatus.OK);
         } else {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping
-    public ResponseEntity<Menu> createMenu(@RequestBody Menu menu) {
+    public ResponseEntity<Serveur> createServeur(@RequestBody Serveur serveur) {
         try {
-        Menu _menu = repo.save(new Menu(menu.getType()));
-        return new ResponseEntity<>(_menu, HttpStatus.CREATED);
+        Serveur _serveur = repo.save(new Serveur(serveur.getNom(), serveur.getIdentifiant(), serveur.getMotdepasse()));
+        return new ResponseEntity<>(_serveur, HttpStatus.CREATED);
         } catch (Exception e) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -13,6 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.aurel.carlib.helper.Functions;
 import com.aurel.carlib.helper.TypeMenu;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -39,6 +40,7 @@ public class Menu {
     @NonNull
     private TypeMenu type;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "menu", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<MenuItem> items = new ArrayList<MenuItem>();
 

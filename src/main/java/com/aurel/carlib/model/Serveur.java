@@ -8,11 +8,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.aurel.carlib.helper.Functions;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -21,15 +18,12 @@ import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name = "serveur")
+@DiscriminatorValue("S")
 @DynamicUpdate
 @RequiredArgsConstructor
 @Getter @Setter
 public class Serveur extends Personnel{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_serveur")
-    private int id;
 
     public Serveur(String nom, String identifiant, String motdepasse){
         super(nom, identifiant, motdepasse);

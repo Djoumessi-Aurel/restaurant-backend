@@ -21,9 +21,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "modePaiement")
+@Table(name = "modePaiement", 
+            uniqueConstraints=
+            @UniqueConstraint(columnNames={"nom"}))
 @DynamicUpdate
 @NoArgsConstructor
 @RequiredArgsConstructor

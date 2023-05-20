@@ -16,53 +16,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.aurel.carlib.helper.TypeMenu;
-import com.aurel.carlib.model.Menu;
-import com.aurel.carlib.repository.MenuRepository;
+import com.aurel.carlib.model.Rubrique;
+import com.aurel.carlib.repository.RubriqueRepository;
 
 @RestController
-@RequestMapping("/api/menu")
-public class MenuController {
+@RequestMapping("/api/rubrique")
+public class RubriqueController {
     
     @Autowired
-	private MenuRepository repo;
+	private RubriqueRepository repo;
 	
 	@GetMapping
-    public ResponseEntity<List<Menu>> getAllMenus(@RequestParam(required = false) TypeMenu type) {
+    public ResponseEntity<List<Rubrique>> getAllRubriques(@RequestParam(required = false) String nom) {
     try {
-        List<Menu> menus = new ArrayList<Menu>();
+        List<Rubrique> rubriques = new ArrayList<Rubrique>();
 
-        if (type == null)
-        repo.findAll().forEach(menus::add);
+        if (nom == null)
+        repo.findAll().forEach(rubriques::add);
         else
-        repo.findByType(type).forEach(menus::add);
+        repo.findByNom(nom).forEach(rubriques::add);
 
-        if (menus.isEmpty()) {
+        if (rubriques.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<>(menus, HttpStatus.OK);
+        return new ResponseEntity<>(rubriques, HttpStatus.OK);
         } catch (Exception e) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Menu> getMenuById(@PathVariable("id") int id) {
-        Optional<Menu> menu = repo.findById(id);
+    public ResponseEntity<Rubrique> getRubriqueById(@PathVariable("id") int id) {
+        Optional<Rubrique> rubrique = repo.findById(id);
 
-        if (menu.isPresent()) {
-        return new ResponseEntity<>(menu.get(), HttpStatus.OK);
+        if (rubrique.isPresent()) {
+        return new ResponseEntity<>(rubrique.get(), HttpStatus.OK);
         } else {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping
-    public ResponseEntity<Menu> createMenu(@RequestBody Menu menu) {
+    public ResponseEntity<Rubrique> createRubrique(@RequestBody Rubrique rubrique) {
         try {
-        Menu _menu = repo.save(new Menu(menu.getType()));
-        return new ResponseEntity<>(_menu, HttpStatus.CREATED);
+        Rubrique _rubrique = repo.save(new Rubrique(rubrique.getNom(), rubrique.getDescription()));
+        return new ResponseEntity<>(_rubrique, HttpStatus.CREATED);
         } catch (Exception e) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -16,53 +16,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.aurel.carlib.helper.TypeMenu;
-import com.aurel.carlib.model.Menu;
-import com.aurel.carlib.repository.MenuRepository;
+import com.aurel.carlib.model.ModePaiement;
+import com.aurel.carlib.repository.ModePaiementRepository;
 
 @RestController
-@RequestMapping("/api/menu")
-public class MenuController {
+@RequestMapping("/api/modePaiement")
+public class ModePaiementController {
     
     @Autowired
-	private MenuRepository repo;
+	private ModePaiementRepository repo;
 	
 	@GetMapping
-    public ResponseEntity<List<Menu>> getAllMenus(@RequestParam(required = false) TypeMenu type) {
+    public ResponseEntity<List<ModePaiement>> getAllModePaiements(@RequestParam(required = false) String nom) {
     try {
-        List<Menu> menus = new ArrayList<Menu>();
+        List<ModePaiement> modePaiements = new ArrayList<ModePaiement>();
 
-        if (type == null)
-        repo.findAll().forEach(menus::add);
+        if (nom == null)
+        repo.findAll().forEach(modePaiements::add);
         else
-        repo.findByType(type).forEach(menus::add);
+        repo.findByNom(nom).forEach(modePaiements::add);
 
-        if (menus.isEmpty()) {
+        if (modePaiements.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<>(menus, HttpStatus.OK);
+        return new ResponseEntity<>(modePaiements, HttpStatus.OK);
         } catch (Exception e) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Menu> getMenuById(@PathVariable("id") int id) {
-        Optional<Menu> menu = repo.findById(id);
+    public ResponseEntity<ModePaiement> getModePaiementById(@PathVariable("id") int id) {
+        Optional<ModePaiement> modePaiement = repo.findById(id);
 
-        if (menu.isPresent()) {
-        return new ResponseEntity<>(menu.get(), HttpStatus.OK);
+        if (modePaiement.isPresent()) {
+        return new ResponseEntity<>(modePaiement.get(), HttpStatus.OK);
         } else {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping
-    public ResponseEntity<Menu> createMenu(@RequestBody Menu menu) {
+    public ResponseEntity<ModePaiement> createModePaiement(@RequestBody ModePaiement modePaiement) {
         try {
-        Menu _menu = repo.save(new Menu(menu.getType()));
-        return new ResponseEntity<>(_menu, HttpStatus.CREATED);
+        ModePaiement _modePaiement = repo.save(new ModePaiement(modePaiement.getNom(), modePaiement.getDescription()));
+        return new ResponseEntity<>(_modePaiement, HttpStatus.CREATED);
         } catch (Exception e) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
