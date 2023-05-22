@@ -44,6 +44,7 @@ public class Ingredient {
     @NonNull
     private String description;
     
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_menuItem")
     private MenuItem menuItem;

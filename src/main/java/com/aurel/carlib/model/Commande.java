@@ -51,7 +51,6 @@ public class Commande {
     @JoinColumn(name = "id_modePaiement")
     private ModePaiement modePaiement;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "commande", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 

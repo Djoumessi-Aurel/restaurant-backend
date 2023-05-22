@@ -2,6 +2,8 @@ package com.aurel.carlib.model;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +34,7 @@ public class OrderIngredient {
     @NonNull
     private Integer quantite;
     
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_orderItem")
     private OrderItem orderItem;

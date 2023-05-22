@@ -37,11 +37,11 @@ public class OrderItem {
     @JoinColumn(name = "id_menuItem")
     private MenuItem menuItem;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_commande")
     private Commande commande;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "orderItem", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<OrderIngredient> orderIngredients = new ArrayList<OrderIngredient>();
 
